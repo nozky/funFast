@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<style>
+  body{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 4em 3em;
+  }
+
+  .output{
+    width: 300px;
+    height: 200px;
+    margin: 4em 0;
+    padding: 1em;
+    border: 1px solid gray;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  p{
+    font-size: 4em;
+  }
+
+  .user-feed-back{
+    margin-top: 2em;
+  }
+
+</style>
+
+<!-- html -->
+<body>
+    <button class="btn btn-outline-primary btn-rounded" data-mdb-ripple-color="dark"
+        style="visibility: visible;" onclick="start()">
+        Start Sequence
+    </button> 
+    
+    <!-- you can use either div or ul to hold the elements -->
+    <div class="output"> 
+      <!-- dynamic content -->
+    </div>
+
+    <div class="container">
+      <h4 class="level">Level</h4>
+    </div>
+
+    <div class="levels"> <!--Change the parameter(speed) every level you want-->
+      <button onclick="setLevel(1000, 'Easy' )">Easy</button>
+      <button onclick="setLevel(400, 'Medium')">Medium</button>
+      <button onclick="setLevel(100, 'Hard')">Hard</button>
+    </div>
+
+    <div id="userInputContainer">
+        <label for="input">Did you see that unique colored number? what number is that?</label>
+        <input type="text" name="input" id="userInput">
+        <button onclick="theRedNumber()">Submit</button>
+    </div>
+
+    <div class="user-feed-back">
+      <!-- dynamic content -->
+    </div>
+</body>
+
+
+<!-- js -->
+<script>
+// var decleration 
+let  array = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+array = array.sort(() => Math.random() - 0.5) // sort array
+const randNum = Math.floor(Math.random() * 10) //+ 1 // i assume this is the number you want to color??? <- remove + 1 to allow 0 - 10 range. 
+
+let redNumber = ""
+let speed = 1000 // <- change this to change the loop speed
+
+
+// grab element
+const output = document.querySelector('.output')
+const userInput = document.getElementById('userInput')
+const displayUserFeedBack = document.querySelector(".user-feed-back")
+
+// display level
+document.querySelector('.level').textContent = `Level: Easy - speed at ${speed} ms`
+
+
+// set userinput visibility to hidden at the start of the program
+userInputContainer.style.visibility = "hidden"
+
+// function to start the process
+  const start = () => {
+    runFast()
+  }
+
+  // function runFast
+  const runFast = () => {
+    
+    let idx = 0
+    const timer = setInterval(()=>{ //loop through array using interval to control how fast you loop.
+     
+      // create new element
+      output.innerHTML = " "
+      const p = document.createElement('p')
+      p.innerText = array[idx]
+      
+      // assign color before inserting to output div 
+      if( randNum == array[idx]){
+        p.style.color = randomColor(Math.floor(Math.random() * 255),Math.floor(Math.random() * 255),Math.floor(Math.random() * 255) , 1)
+        redNumber = array[idx] // store the red number        
+      }else{
+        p.style.color = "blue"
+      }
+      
+      // insert to output div
+      output.append(p)
+      idx++
+
+      if( idx > array.length - 1) {
+        clearInterval(timer)
+        userInputContainer.style.visibility = "visible" 
+      }
+     },speed)
+    
+  }
+
+  // function to return a random color
+  const randomColor = (color1, color2, color3, alpha) => {
+    return `rgba(${color1}, ${color2}, ${color3}, ${alpha})`
+  }
+
+  // function to determine the red number
+  const theRedNumber = ()=> {
+    let feedBack =""
+    if( redNumber == userInput.value){
+       feedBack = "Congratulation.. You are a genius!"
+       const h2 = document.createElement('h2')
+       h2.style.color ="blue"
+       h2.textContent = feedBack
+       displayUserFeedBack.append(h2)
+    }else{
+      feedBack = "Wrong.. Focus and try harder next time :)"
+      const h2 = document.createElement('h2')
+      h2.textContent = feedBack
+      h2.style.color = "red"
+      displayUserFeedBack.append(h2)
+    }
+}
+
+// set level
+const setLevel =(setSpeed, text)=> {
+  speed = setSpeed
+  document.querySelector('.level').innerText = textContent = `Level: ${text} - speed at ${speed} ms`
+}
+
+</script>
+</html>
